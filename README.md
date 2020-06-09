@@ -1,2 +1,2 @@
-# data-analytics-and-visualization
-Programming Foundation for Data Analytics and Visualization
+# Programming Foundation for Data Analytics and Visualization
+- **Bayesnet**
