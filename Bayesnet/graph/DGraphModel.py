@@ -8,21 +8,25 @@ from . import AbstractGraph as ag
 #     super().__init__(nodeList=nodeList)
 
 graph = ag.AbstractGraph()
-for idx in range(10):
-  graph.add(str(idx))
-graph.connect('0', '1')
-graph.connect('0', '5')
-graph.connect('1', '7')
-graph.connect('3', '2')
-graph.connect('3', '4')
-graph.connect('3', '7')
-graph.connect('3', '8')
-graph.connect('4', '8')
-graph.connect('6', '0')
-graph.connect('6', '1')
-graph.connect('6', '2')
-graph.connect('8', '2')
-graph.connect('8', '7')
-graph.connect('9', '4')
+
+graph.add('0');
+graph.add('1');
+graph.add('2');
+graph.add('3');
+graph.add('4');
+graph.connect('0', '1', 5);
+graph.connect('0', '2', 3);
+graph.connect('0', '4', 2);
+graph.connect('1', '2', 2);
+graph.connect('1', '3', 6);
+graph.connect('2', '1', 1);
+graph.connect('2', '3', 2);
+graph.connect('4', '1', 6);
+graph.connect('4', '2', 10);
+graph.connect('4', '3', 4);
+
+graph.printGraph()
+
+graph.remove('1');
 
 graph.printGraph()

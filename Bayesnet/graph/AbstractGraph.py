@@ -5,11 +5,11 @@ class Edge():
   def __init__(self, fromNode, toNode, weight=0):
     self.fromNode = fromNode
     self.toNode = toNode
-    self.weight = weight
+    self.weight = float(weight)
 
   # Adjust the weight of an Edge
   def weight(self, weight):
-    self.weight = weight
+    self.weight = float(weight)
 
 class VertexNode():
   def __init__(self, value):
@@ -39,13 +39,18 @@ class VertexNode():
   @staticmethod
   def disconnect(fromNode, toNode):
     if (toNode in fromNode.outNodes) & (fromNode in toNode.inNodes):
-      fromNode.outNodes.remove(toNode)
-      fromNode.totalOut -= 1
-      toNode.inNodes.remove(fromNode)
-      toNode.totalIn -= 1
-      edge = getEdge(fromNode, toNode)
-      fromNode.outwardEdges.remove(edge)
-      toNode.inwardEdges.remove(edge)
+      edge = (VertexNode).getEdge(fromNode, toNode)
+      if edge is not None:
+        fromNode.outNodes.remove(toNode)
+        fromNode.totalOut -= 1
+        toNode.inNodes.remove(fromNode)
+        toNode.totalIn -= 1
+        fromNode.outwardEdges.remove(edge)
+        toNode.inwardEdges.remove(edge)
+      # else:
+      #   raise Exception('Edge not found!')
+    # else:
+    #   raise Exception('Not connected!')
 
   # Get edge between VertexNodes
   @staticmethod
@@ -54,6 +59,10 @@ class VertexNode():
       for edge in fromNode.outwardEdges:
         if (edge.fromNode is fromNode) & (edge.toNode is toNode):
           return edge
+        else:
+          return None
+    else:
+      return None
 
 class AbstractGraph():
   def __init__(self, nodeList=[]):
@@ -73,6 +82,15 @@ class AbstractGraph():
     toNode = self.getVertexNode(toValue)
     if (fromNode is not None) & (toNode is not None):
       fromNode.connect(toNode, weight)
+    # else:
+    #   raise Exception('Vertex not found!')
+
+  # Disconnect between 2 VertexNodes
+  def disconnect(self, fromValue, toValue):
+    fromNode = self.getVertexNode(fromValue)
+    toNode = self.getVertexNode(toValue)
+    if (fromNode is not None) & (toNode is not None):
+      VertexNode.disconnect(fromNode, toNode)
     # else:
     #   raise Exception('Vertex not found!')
 
