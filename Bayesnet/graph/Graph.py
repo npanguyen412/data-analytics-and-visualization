@@ -1,70 +1,8 @@
 import numpy as np
 import pandas as pd
+from graph.VertexNode import VertexNode
 
-class Edge():
-  def __init__(self, fromNode, toNode, weight=0):
-    self.fromNode = fromNode
-    self.toNode = toNode
-    self.weight = float(weight)
-
-  # Adjust the weight of an Edge
-  def weight(self, weight):
-    self.weight = float(weight)
-
-class VertexNode():
-  def __init__(self, value):
-    self.value = value
-    self.inNodes = []
-    self.outNodes = []
-    self.totalIn = 0
-    self.totalOut = 0
-    self.inwardEdges = []
-    self.outwardEdges = []
-    self.probDist = []
-
-  # Connect to another VertexNode
-  def connect(self, toNode, weight=0):
-    if toNode not in self.outNodes:
-      self.outNodes.append(toNode)
-      self.totalOut += 1
-      toNode.inNodes.append(self)
-      toNode.totalIn += 1
-      edge = Edge(self, toNode, weight)
-      self.outwardEdges.append(edge)
-      toNode.inwardEdges.append(edge)
-    # else:
-    #   raise Exception('Already connected!')
-
-  # Disconnect a connected VertexNode from another VertexNode
-  @staticmethod
-  def disconnect(fromNode, toNode):
-    if (toNode in fromNode.outNodes) & (fromNode in toNode.inNodes):
-      edge = (VertexNode).getEdge(fromNode, toNode)
-      if edge is not None:
-        fromNode.outNodes.remove(toNode)
-        fromNode.totalOut -= 1
-        toNode.inNodes.remove(fromNode)
-        toNode.totalIn -= 1
-        fromNode.outwardEdges.remove(edge)
-        toNode.inwardEdges.remove(edge)
-      # else:
-      #   raise Exception('Edge not found!')
-    # else:
-    #   raise Exception('Not connected!')
-
-  # Get edge between VertexNodes
-  @staticmethod
-  def getEdge(fromNode, toNode):
-    if (toNode in fromNode.outNodes) & (fromNode in toNode.inNodes):
-      for edge in fromNode.outwardEdges:
-        if (edge.fromNode is fromNode) & (edge.toNode is toNode):
-          return edge
-        else:
-          return None
-    else:
-      return None
-
-class AbstractGraph():
+class Graph():
   def __init__(self, nodeList=[]):
     self.nodeList = nodeList
 
@@ -98,9 +36,9 @@ class AbstractGraph():
   def remove(self, value):
     node = self.getVertexNode(value)
     if node is not None:
-      for inNode in node.inNodes:
+      for inNode in node.inNodes.copy():
         VertexNode.disconnect(inNode, node)
-      for outNode in node.outNodes:
+      for outNode in node.outNodes.copy():
         VertexNode.disconnect(node, outNode)
       self.nodeList.remove(node)
     # else:
